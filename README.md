@@ -1,243 +1,202 @@
-index.html
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Lucky Color</title>
+<title>Lucky Color Game</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#10182b;color:white;font-family:Arial,sans-serif}
-header{background:#172541;padding:18px;text-align:center}
-h1{color:#ffcf45;margin:0}
-.container{max-width:480px;margin:auto;padding:14px}
-.wallet{background:linear-gradient(120deg,#e5a72b,#ffcf58);color:#241900;padding:18px;border-radius:14px}
-.wallet h2{font-size:28px;margin:8px 0}
-button{border:0;border-radius:9px;padding:13px;font-weight:bold;cursor:pointer}
-.wallet button{background:#172541;color:white}
-.panel{background:#1b2944;padding:15px;border-radius:13px;margin-top:14px}
-.timer{text-align:center;font-size:35px;color:#ffce46;font-weight:bold;margin:12px}
-.period{text-align:center;color:#b9c9e5}
-.colors,.numbers,.sizes{display:grid;gap:9px;margin-top:12px}
-.colors{grid-template-columns:repeat(3,1fr)}
-.numbers{grid-template-columns:repeat(5,1fr)}
-.sizes{grid-template-columns:repeat(2,1fr)}
-.pick{color:white;min-height:45px;font-size:15px}
-.red{background:#e84452}
-.green{background:#16a66a}
-.violet{background:#9149d9}
-.number{background:#263a60}
-.big{background:#e69c29;color:#241900}
-.small{background:#2879d7}
+body{
+ margin:0;background:#101426;color:white;
+ font-family:Arial,sans-serif;padding:15px;
+}
+.container{max-width:480px;margin:auto}
+h1{text-align:center;color:#ffd34e}
+.box{
+ background:#202944;padding:16px;
+ border-radius:14px;margin:14px 0;
+ text-align:center;
+}
+.wallet{font-size:25px;color:#ffd34e}
+button{
+ border:0;border-radius:9px;padding:13px 15px;
+ margin:5px;font-size:15px;font-weight:bold;
+ cursor:pointer;
+}
+.red{background:#f04444;color:white}
+.green{background:#13b96b;color:white}
+.violet{background:#963de0;color:white}
+.gold{background:#ffd34e;color:#171717}
+.number{background:#34415f;color:white;min-width:42px}
 .selected{outline:3px solid white}
-.play{width:100%;background:#ffca43;color:#241900;margin-top:16px;font-size:17px}
-.history{width:100%;border-collapse:collapse;margin-top:12px}
-th,td{padding:11px;text-align:center;border-bottom:1px solid #34435f}
-.muted{color:#aebbd1;font-size:13px}
-#message{text-align:center;color:#ffcf45;margin-top:13px}
+#timer{font-size:38px;color:#ffd34e;font-weight:bold}
+#message{color:#ffd34e;min-height:22px}
+.history{text-align:left;line-height:2}
+.small{font-size:13px;color:#b9c2d8}
 </style>
 </head>
 <body>
-
-<header>
-<h1>LUCKY COLOR</h1>
-<p>Play • Enjoy • Demo Coins</p>
-</header>
-
 <div class="container">
 
-<div class="wallet">
-<div>Demo Wallet Balance</div>
-<h2><span id="balance">1000</span> Coins</h2>
-<button onclick="addCoins()">+ Add 50 Demo Coins</button>
+<h1>LUCKY COLOR</h1>
+
+<div class="box">
+<h3>DEMO WALLET</h3>
+<div class="wallet" id="wallet">1000 Coins</div>
+<button class="gold" onclick="addCoins()">+ Add 50 Demo Coins</button>
 </div>
 
-<div class="panel">
-<h3>WINGO 30 SEC</h3>
-<div class="period">Period: <span id="period">100001</span></div>
-<div class="timer" id="timer">30</div>
-<div class="muted" style="text-align:center">Next result in</div>
+<div class="box">
+<h2>WINGO 30 SEC</h2>
+<div id="timer">30</div>
+<p class="small">Next result in</p>
 </div>
 
-<div class="panel">
-<h3>Select Color</h3>
-<div class="colors">
-<button class="pick red" onclick="choose('Red',this)">RED</button>
-<button class="pick green" onclick="choose('Green',this)">GREEN</button>
-<button class="pick violet" onclick="choose('Violet',this)">VIOLET</button>
-</div>
+<div class="box">
+<h3>Choose Color</h3>
+<button class="red choice" onclick="selectChoice('Red',this)">RED</button>
+<button class="green choice" onclick="selectChoice('Green',this)">GREEN</button>
+<button class="violet choice" onclick="selectChoice('Violet',this)">VIOLET</button>
 
-<h3>Select Number</h3>
-<div class="numbers">
-<button class="pick number" onclick="choose('0',this)">0</button>
-<button class="pick number" onclick="choose('1',this)">1</button>
-<button class="pick number" onclick="choose('2',this)">2</button>
-<button class="pick number" onclick="choose('3',this)">3</button>
-<button class="pick number" onclick="choose('4',this)">4</button>
-<button class="pick number" onclick="choose('5',this)">5</button>
-<button class="pick number" onclick="choose('6',this)">6</button>
-<button class="pick number" onclick="choose('7',this)">7</button>
-<button class="pick number" onclick="choose('8',this)">8</button>
-<button class="pick number" onclick="choose('9',this)">9</button>
-</div>
+<h3>Choose Number</h3>
+<div id="numbers"></div>
 
 <h3>Big / Small</h3>
-<div class="sizes">
-<button class="pick big" onclick="choose('Big',this)">BIG (5-9)</button>
-<button class="pick small" onclick="choose('Small',this)">SMALL (0-4)</button>
+<button class="gold choice" onclick="selectChoice('Big',this)">BIG</button>
+<button class="gold choice" onclick="selectChoice('Small',this)">SMALL</button>
+
+<p id="selected">Your selection: None</p>
+<button class="gold" onclick="placeBet()">PLAY DEMO - 10 COINS</button>
+<p id="message">Select your choice</p>
+<p class="small">Demo coins only. No real money.</p>
 </div>
 
-<button class="play" onclick="play()">PLAY DEMO</button>
-<div id="message">Choose your option</div>
-</div>
-
-<div class="panel">
+<div class="box">
 <h3>Latest Results</h3>
-<table class="history">
-<thead>
-<tr><th>Period</th><th>Number</th><th>Color</th><th>Size</th></tr>
-</thead>
-<tbody id="history">
-<tr><td colspan="4">No results yet</td></tr>
-</tbody>
-</table>
+<div id="results">Waiting for result...</div>
 </div>
 
-<div class="panel">
+<div class="box">
 <h3>My History</h3>
-<div id="myHistory" class="muted">No activity yet</div>
+<div id="history" class="history">No history yet</div>
 </div>
 
 </div>
 
 <script>
-let balance=1000;
-let selected=null;
-let seconds=30;
-let period=100001;
-let locked=false;
+let wallet=1000;
+let time=30;
+let choice=null;
+let pending=false;
+let results=[];
+let history=[];
 
-function choose(value,button){
-if(locked)return;
-selected=value;
-document.querySelectorAll('.pick').forEach(b=>b.classList.remove('selected'));
-button.classList.add('selected');
-document.getElementById('message').textContent="Selected: "+value;
+function updateWallet(){
+ document.getElementById("wallet").innerText=wallet+" Coins";
 }
 
 function addCoins(){
-balance+=50;
-updateBalance();
-document.getElementById('message').textContent="50 Demo Coins added!";
+ wallet+=50;
+ updateWallet();
+ document.getElementById("message").innerText="50 demo coins added!";
 }
 
-function updateBalance(){
-document.getElementById('balance').textContent=balance;
+function selectChoice(value,button){
+ if(pending){
+  document.getElementById("message").innerText="Wait for next round";
+  return;
+ }
+ choice=value;
+ document.querySelectorAll(".choice,.number").forEach(b=>b.classList.remove("selected"));
+ button.classList.add("selected");
+ document.getElementById("selected").innerText="Your selection: "+value;
 }
 
-function play(){
-if(locked)return;
-if(!selected){
-document.getElementById('message').textContent="Please select an option first!";
-return;
-}
-if(balance<10){
-document.getElementById('message').textContent="Not enough demo coins!";
-return;
-}
-balance-=10;
-updateBalance();
-
-let choice=selected;
-let currentPeriod=period;
-let result="Pending";
-locked=true;
-document.getElementById('message').textContent=
-"10 Demo Coins used. Result pending!";
-
-let my=document.getElementById('myHistory');
-my.innerHTML="Period "+currentPeriod+
-" | Choice: "+choice+" | Result: Pending";
-
-window.pendingChoice=choice;
-window.pendingPeriod=currentPeriod;
+for(let i=0;i<10;i++){
+ let b=document.createElement("button");
+ b.className="number";
+ b.innerText=i;
+ b.onclick=()=>selectChoice(String(i),b);
+ document.getElementById("numbers").appendChild(b);
 }
 
-function getColor(n){
-if(n===0)return "Violet";
-if(n===5)return "Violet";
-if(n%2===0)return "Red";
-return "Green";
+function placeBet(){
+ if(pending){
+  document.getElementById("message").innerText="Bet already placed!";
+  return;
+ }
+ if(!choice){
+  document.getElementById("message").innerText="Please select first!";
+  return;
+ }
+ if(wallet<10){
+  document.getElementById("message").innerText="Not enough coins!";
+  return;
+ }
+ wallet-=10;
+ updateWallet();
+ pending=true;
+ document.getElementById("message").innerText="Your demo bet is placed!";
 }
 
-function finishRound(){
-let n=Math.floor(Math.random()*10);
-let color=getColor(n);
-let size=n>=5?"Big":"Small";
+function newRound(){
+ let n=Math.floor(Math.random()*10);
+ let color=(n===0||n===5)?"Violet":(n%2===0?"Red":"Green");
+ let size=n>=5?"Big":"Small";
+ let won=pending && (
+  choice===color || choice===String(n) || choice===size
+ );
 
-let choice=window.pendingChoice;
-let won=false;
+ if(won){
+  wallet+=20;
+  updateWallet();
+ }
 
-if(choice!==undefined){
-if(choice===String(n)||choice===color||choice===size){
-won=true;
-}
-}
+ let result={
+  number:n,
+  color:color,
+  size:size,
+  status:pending?(won?"WIN +20":"LOSS -10"):"No bet"
+ };
 
-let message="Result: "+n+" - "+color+" - "+size;
+ results.unshift(result);
+ if(results.length>10)results.pop();
 
-if(choice!==undefined){
-if(won){
-balance+=20;
-message+=" | Demo win: +20 Coins";
-}else{
-message+=" | Demo loss: 0 Coins";
-}
-updateBalance();
+ history.unshift(result);
+ if(history.length>20)history.pop();
 
-document.getElementById('myHistory').innerHTML=
-"Period "+window.pendingPeriod+
-" | Your choice: "+choice+
-" | Result: "+n+
-" | "+(won?"Demo Win":"Demo Loss");
-window.pendingChoice=undefined;
-}
+ document.getElementById("results").innerHTML=
+ results.map(r=>r.number+" | "+r.color+" | "+r.size).join("<br>");
 
-document.getElementById('message').textContent=message;
+ document.getElementById("history").innerHTML=
+ history.map(r=>
+ r.number+" | "+r.color+" | "+r.size+" | "+r.status
+ ).join("<br>");
 
-let row=document.createElement('tr');
-row.innerHTML="<td>"+period+"</td><td>"+n+
-"</td><td>"+color+"</td><td>"+size+"</td>";
+ if(pending){
+  document.getElementById("message").innerText=
+  won?"Congratulations! You won 20 demo coins.":"Round lost. Try again!";
+ }else{
+  document.getElementById("message").innerText="New result: "+n;
+ }
 
-let history=document.getElementById('history');
-if(history.children.length===1 &&
-history.children[0].textContent.includes("No results")){
-history.innerHTML="";
-}
-history.prepend(row);
-
-while(history.children.length>10){
-history.removeChild(history.lastChild);
+ pending=false;
+ choice=null;
+ document.getElementById("selected").innerText="Your selection: None";
+ document.querySelectorAll(".choice,.number").forEach(b=>b.classList.remove("selected"));
 }
 
-period++;
-document.getElementById('period').textContent=period;
-locked=false;
-selected=null;
-document.querySelectorAll('.pick').forEach(b=>b.classList.remove('selected'));
-}
-
-setInterval(function(){
-seconds--;
-if(seconds<=0){
-finishRound();
-seconds=30;
-}
-document.getElementById('timer').textContent=seconds;
+setInterval(()=>{
+ time--;
+ if(time<=0){
+  newRound();
+  time=30;
+ }
+ document.getElementById("timer").innerText=time;
 },1000);
-</script>
 
+updateWallet();
+</script>
 </body>
 </html>
-index.html# luckycolor
-Lucky Color - Mobile Web Game
